@@ -23,7 +23,7 @@ const Header = () => {
         <Row>
           <Col>
             <Link to="/">
-            <img className="nav-logo" src={logo} alt="logo" />
+              <img className="nav-logo" src={logo} alt="logo" />
             </Link>
           </Col>
           <Col className="d-flex align-items-center justify-content-end">
@@ -79,25 +79,29 @@ const MidNav = () => {
       <Nav className="d-flex justify-content-end">
         <Nav.Item className="me-4">
           <Nav.Link bsPrefix="middle-navbar">
-            <Icon
-              name="user"
-              circular
-              size="large"
-              className="d-block mb-2"
-            ></Icon>
-            Sıgn In
+            <Link to="/login">
+              <Icon
+                name="user"
+                circular
+                size="large"
+                className="d-block mb-2"
+              ></Icon>
+              Sıgn In
+            </Link>
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
           <Nav.Link bsPrefix="middle-navbar">
-            <Icon
-              name="unlock alternate"
-              circular
-              size="large"
-              className="d-block mb-2 ms-2"
-            ></Icon>{" "}
-            Register
+            <Link to="/register">
+              <Icon
+                name="unlock alternate"
+                circular
+                size="large"
+                className="d-block mb-2 ms-2"
+              ></Icon>{" "}
+              Register
+            </Link>
           </Nav.Link>
         </Nav.Item>
       </Nav>
@@ -110,10 +114,10 @@ const NavBottom = () => {
 
   const [activeKey, setActiveKey] = useState("home");
 
-  const handleItemClick = (eventKey)=> {
+  const handleItemClick = (eventKey) => {
     eventKey === "home" ? history.push(`/`) : history.push(`/${eventKey}`);
     setActiveKey(eventKey);
-  }
+  };
 
   return (
     <Navbar expand="md">
@@ -125,11 +129,21 @@ const NavBottom = () => {
             activeKey={activeKey}
             onSelect={handleItemClick}
           >
-            <Nav.Link className="nav-bottom-links" eventKey="home">Home</Nav.Link>
-            <Nav.Link className="nav-bottom-links" eventKey="about">About</Nav.Link>
-            <Nav.Link className="nav-bottom-links" eventKey="package">Package</Nav.Link>
-            <Nav.Link className="nav-bottom-links" eventKey="location">Location</Nav.Link>
-            <Nav.Link className="nav-bottom-links" eventKey="contact">Contact</Nav.Link>
+            <Nav.Link className="nav-bottom-links" eventKey="home">
+              Home
+            </Nav.Link>
+            <Nav.Link className="nav-bottom-links" eventKey="about">
+              About
+            </Nav.Link>
+            <Nav.Link className="nav-bottom-links" eventKey="package">
+              Package
+            </Nav.Link>
+            <Nav.Link className="nav-bottom-links" eventKey="location">
+              Location
+            </Nav.Link>
+            <Nav.Link className="nav-bottom-links" eventKey="contact">
+              Contact
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
