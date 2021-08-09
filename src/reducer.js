@@ -10,6 +10,8 @@ export const initialState = {
         return { ...state, userInfo: action.item };
       case "LOGOUT":
         return { ...state, userInfo: action.item };
+        case "UPDATE":
+        return { ...state, userInfo: action.item };
       default:
         return state;
     }
