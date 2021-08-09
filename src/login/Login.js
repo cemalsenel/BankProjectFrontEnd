@@ -1,11 +1,14 @@
 import React from "react";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
 import { Container, Row, Col } from "react-bootstrap";
 import { Button, LinearProgress } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
+import "react-toastify/dist/ReactToastify.css";
+import { useStateValue } from "../StateProvider";
+import service from "../service/BankService";
 import { useHistory } from "react-router";
-import { ToastContainer, toast } from "react-toastify";
 
 import "./Login.css";
 
@@ -33,8 +36,8 @@ const LoginForm = (props) => (
               name="password"
               type="password"
             />
+            {props.isSubmitting && <LinearProgress />}
           </Col>
-          {props.isSubmitting && <LinearProgress />}
         </Row>
         <Row className="mt-4 ">
           <Col className="d-flex justify-content-center p-3">
@@ -56,6 +59,7 @@ const LoginForm = (props) => (
 
 const Login = () => {
   const history = useHistory();
+  const [{ userInfo }, dispatch] = useStateValue();
   return (
     <div>
       <Formik
@@ -63,37 +67,41 @@ const Login = () => {
         validationSchema={Yup.object({
           username: Yup.string()
             .max(15, "Must be 15 characters or less")
-            .required("Username Required"),
+            .required("username Required"),
           password: Yup.string()
             .max(20, "Must be 20 characters or less")
             .min(6, "Must be at least 6 character")
             .required("Password Required"),
         })}
-        
         onSubmit={(values, actions) => {
-            // servis.login(values).then((res) => {
-            //     if(res.status === 200){
-            //         const userInfo = res.data;
-            //     }
-            // })
+          service.login(values).then((res) => {
+            if (res.status === 200) {
+              toast.success("Login Successful", {
+                position: toast.POSITION.TOP_CENTER,
+              });
+              const userInfo = res.data;
+              localStorage.setItem(
+                "auth",
+                JSON.stringify({ token: userInfo.jwt })
+              );
+              dispatch({
+                type: "LOGIN",
+                item: userInfo,
+              });
 
-            // if(userInfo && isAdmin){
-            //     history.push("/admin");
-            // }else{
-            //     history.push("/user");
-            // }
-
-            toast.success("Login Succeeful", {
-                position : toast.POSITION.TOP_CENTER,
-            });
-            actions.resetForm();
-            actions.setSubmitting(false);
+              if (userInfo?.user?.isAdmin) {
+                history.push("/admin");
+              } else {
+                history.push("/user");
+              }
+              actions.resetForm();
+              actions.setSubmitting(false);
+            }
+          });
         }}
-        
-        component = {LoginForm}
-      >
-      </Formik>
-      <ToastContainer/>
+        component={LoginForm}
+      ></Formik>
+      <ToastContainer />
     </div>
   );
 };

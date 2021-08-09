@@ -7,7 +7,7 @@ import logo from "../images/logo.png";
 const Footer = () => {
   return (
     <footer className="footer">
-      <Col sm={12} md={6} lg={4} className="footer-left">
+      <Col sm={6} md={4} className="footer-left">
         <Row>
           <p className="about">
             <span> BANK OF ANATOLIA</span> Ut congue augue non tellus bibendum,
@@ -24,43 +24,39 @@ const Footer = () => {
           <Link to="/">
             <i className="fa fa-facebook"></i>
           </Link>
-
           <Link to="/">
             <i className="fa fa-twitter"></i>
           </Link>
-
           <Link to="/">
             <i className="fa fa-linkedin"></i>
           </Link>
-
           <Link to="/">
             <i className="fa fa-google-plus"></i>
           </Link>
-
           <Link to="/">
             <i className="fa fa-instagram"></i>
           </Link>
         </Row>
       </Col>
-      <Col sm={12} md={6} lg={4} className="footer-center">
+
+      <Col sm={6} md={4} className="footer-center">
         <div>
           <i className="fa fa-map-marker"></i>
           <p>
-            <span>Street Name and Number</span> Anatolia, Anatolia
+            <span>Stret name and number</span> City, Country
           </p>
         </div>
-
         <div>
           <i className="fa fa-phone"></i>
-          <p>+01259779248</p>
+          <p> (+00) 0000 000 000</p>
         </div>
-
         <div>
           <i className="fa fa-envelope"></i>
-          <p>anatolia@bankofanatolia.com</p>
+          <p> email@bankofanatoli.com</p>
         </div>
       </Col>
-      <Col sm={12} md={6} lg={4} className="footer-right">
+
+      <Col sm={6} md={4} className="footer-right">
         <img src={logo} alt="logo" style={{ height: "100px" }} />
 
         <p className="menu">
@@ -74,5 +70,4 @@ const Footer = () => {
     </footer>
   );
 };
-
 export default Footer;

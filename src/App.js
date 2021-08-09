@@ -1,36 +1,34 @@
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-
-import './App.css';
-import Header from "./header/Header"
-import Footer from "./footer/Footer"
-import Home from "./home/Home"
-import About from './about/About';
-import Register from './register/Register';
-import Login from './login/Login';
-import 'react-toastify/dist/ReactToastify.css';
-
-
-
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Header from "./header/Header";
+import Home from "./home/Home";
+import Footer from "./footer/Footer";
+import About from "./about/About";
+import Login from "./login/Login";
+import Register from "./register/Register";
+import User from "./user/User";
 function App() {
   return (
     <div className="App">
       <Router>
-        <Header/>
+        <Header />
         <Switch>
           <Route exact path="/">
-            <Home/>
+            <Home />
           </Route>
           <Route path="/about">
-            <About/>
+            <About />
           </Route>
           <Route path="/login">
-            <Login/>
+            <Login />
           </Route>
           <Route path="/register">
-            <Register/>
+            <Register />
+          </Route>
+          <Route path="/user">
+            <User />
           </Route>
         </Switch>
-        <Footer/>
+        <Footer />
       </Router>
     </div>
   );

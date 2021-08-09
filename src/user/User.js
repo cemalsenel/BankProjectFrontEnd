@@ -1,0 +1,167 @@
+import React from "react";
+import { useStateValue } from "../StateProvider";
+
+//React <Router>
+import { useHistory } from "react-router-dom";
+
+import { makeStyles } from "@material-ui/core/styles";
+// @material-ui/icons
+import AccountBalanceWallet from "@material-ui/icons/AccountBalanceWallet";
+import AccountBalance from "@material-ui/icons/AccountBalance";
+import AttachMoney from "@material-ui/icons/AttachMoney";
+import DateRange from "@material-ui/icons/DateRange";
+import Update from "@material-ui/icons/Update";
+import Accessibility from "@material-ui/icons/Accessibility";
+
+// Card Components
+import CardBody from "../components/Card/CardBody";
+import GridItem from "../components/Grid/GridItem";
+import GridContainer from "../components/Grid/GridContainer";
+import Card from "../components/Card/Card";
+import CardHeader from "../components/Card/CardHeader";
+import CardIcon from "../components/Card/CardIcon";
+import CardFooter from "../components/Card/CardFooter";
+
+// importing lodash
+import _ from "lodash";
+
+//Global styles
+import styles from "../styles/dashboardStyle";
+import { Container } from "react-bootstrap";
+
+const useStyles = makeStyles(styles);
+
+const User = () => {
+  const classes = useStyles();
+  const [{ userInfo }] = useStateValue();
+  const history = useHistory();
+
+  console.log(userInfo);
+
+  let totalDeposits = 0;
+  let totalWithdraw = 0;
+  let depositArray = [];
+  let withdrawArray = [];
+
+  const transactions = userInfo.user.transactions;
+  // Getting Unique transaction date
+  const uniqDates = _.uniq(_.map(transactions, "date")).sort();
+
+  //For the cards
+  let totalRecipients = 0;
+  if (userInfo?.user?.recipients?.length > 0) {
+    totalRecipients = userInfo.user.recipients.length;
+  }
+
+  console.log(userInfo);
+
+  // Extracting Deposit, Withdraw and calculating sum of them
+  uniqDates.forEach((date) => {
+    const deposits = transactions.filter((tran) => {
+      return tran.type === "DEPOSIT" && tran.date === date;
+    });
+
+    depositArray = deposits.map((item) => item.amount);
+    totalDeposits = depositArray.reduce((init, sum) => init + sum, 0);
+
+    const withdraws = transactions.filter((tran) => {
+      return tran.type === "WITHDRAW" && tran.date === date;
+    });
+
+    withdrawArray = withdraws.map((item) => item.amount);
+    totalWithdraw = withdrawArray.reduce((init, sum) => init + sum, 0);
+    console.log(depositArray);
+    console.log(withdrawArray);
+  });
+
+  // function calculate(type) {
+  //   return userInfo.user.transactions
+  //     .filter((t) => t.type === type)
+  //     .map((t) => t.amount)
+  //     .reduce((acc, d) => acc + d, 0);
+  // }
+
+  return (
+    <div>
+      {!userInfo && history.push("./login")}
+      {userInfo && userInfo.user && (
+        <Container>
+          <GridContainer>
+            <GridItem xs={12} sm={12} md={3}>
+              <Card>
+                <CardHeader color="warning" stats icon>
+                  <CardIcon color="warning">
+                    <AccountBalance />
+                  </CardIcon>
+                  <p className={classes.cardCategory}>Balance</p>
+                  <h3 className={classes.cardTitle}>
+                    ${userInfo.user.accountBalance}
+                  </h3>
+                </CardHeader>
+                <CardFooter stats>
+                  <div className={classes.stats}>
+                    <Update />
+                    Just updated
+                  </div>
+                </CardFooter>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={12} md={3}>
+              <Card>
+                <CardHeader color="success" stats icon>
+                  <CardIcon color="success">
+                    <AttachMoney />
+                  </CardIcon>
+                  <p className={classes.cardCategory}>Deposits</p>
+                  <h3 className={classes.cardTitle}>${totalDeposits}</h3>
+                </CardHeader>
+                <CardFooter stats>
+                  <div className={classes.stats}>
+                    <DateRange />
+                    Last 1 Week
+                  </div>
+                </CardFooter>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={12} md={3}>
+              <Card>
+                <CardHeader color="danger" stats icon>
+                  <CardIcon color="danger">
+                    <AccountBalanceWallet />
+                  </CardIcon>
+                  <p className={classes.cardCategory}>Withdraw</p>
+                  <h3 className={classes.cardTitle}>${totalWithdraw}</h3>
+                </CardHeader>
+                <CardFooter stats>
+                  <div className={classes.stats}>
+                    <DateRange />
+                    Last 1 Week
+                  </div>
+                </CardFooter>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={12} md={3}>
+              <Card>
+                <CardHeader color="info" stats icon>
+                  <CardIcon color="info">
+                    <Accessibility />
+                  </CardIcon>
+                  <p className={classes.cardCategory}>Recipients</p>
+                  <h3 className={classes.cardTitle}>{totalRecipients}</h3>
+                </CardHeader>
+                <CardFooter stats>
+                  <div className={classes.stats}>
+                    <Update />
+                    Latest
+                  </div>
+                </CardFooter>
+              </Card>
+            </GridItem>
+          </GridContainer>
+        </Container>
+      )}
+    </div>
+  );
+};
+
+export default User;
