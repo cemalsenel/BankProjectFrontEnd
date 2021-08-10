@@ -8,6 +8,8 @@ import Register from "./register/Register";
 import User from "./user/User";
 import Logout from "./logout/Logout";
 import Deposit from "./deposit/Deposit";
+import Withdraw from "./withdraw/Withdraw";
+
 function App() {
   return (
     <div className="App">
@@ -36,7 +38,7 @@ function App() {
             <Deposit />
           </Route>
           <Route path="/withdraw">
-            <Deposit />
+            <Withdraw />
           </Route>
         </Switch>
         <Footer />
