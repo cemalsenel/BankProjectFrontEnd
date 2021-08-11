@@ -31,7 +31,7 @@ import { Container } from "react-bootstrap";
 
 const useStyles = makeStyles(styles);
 
-const User = () => {
+const Admin = () => {
   const classes = useStyles();
   const [{ userInfo }] = useStateValue();
   const history = useHistory();
@@ -52,12 +52,6 @@ const User = () => {
   // Getting Unique transaction date
   const dates = transactions.map((tran) => tran.date);
   const uniqDates = [...new Set(dates)];
-
-  //For the cards
-  let totalRecipients = 0;
-  if (userInfo?.user?.recipients?.length > 0) {
-    totalRecipients = userInfo.user.recipients.length;
-  }
 
   // Extracting Deposit, Withdraw and calculating sum of them
   uniqDates.forEach((date) => {
@@ -128,9 +122,9 @@ const User = () => {
                   <CardIcon color="warning">
                     <AccountBalance />
                   </CardIcon>
-                  <p className={classes.cardCategory}>Balance</p>
+                  <p className={classes.cardCategory}>Total Balance</p>
                   <h3 className={classes.cardTitle}>
-                    ${userInfo.user.accountBalance}
+                    ${userInfo.user.totalBalance}
                   </h3>
                 </CardHeader>
                 <CardFooter stats>
@@ -147,7 +141,7 @@ const User = () => {
                   <CardIcon color="success">
                     <AttachMoney />
                   </CardIcon>
-                  <p className={classes.cardCategory}>Deposits</p>
+                  <p className={classes.cardCategory}>Total Deposits</p>
                   <h3 className={classes.cardTitle}>${totalDeposits}</h3>
                 </CardHeader>
                 <CardFooter stats>
@@ -164,7 +158,7 @@ const User = () => {
                   <CardIcon color="danger">
                     <AccountBalanceWallet />
                   </CardIcon>
-                  <p className={classes.cardCategory}>Withdraw</p>
+                  <p className={classes.cardCategory}>Total Withdraws</p>
                   <h3 className={classes.cardTitle}>${totalWithdraws}</h3>
                 </CardHeader>
                 <CardFooter stats>
@@ -181,8 +175,10 @@ const User = () => {
                   <CardIcon color="info">
                     <Accessibility />
                   </CardIcon>
-                  <p className={classes.cardCategory}>Recipients</p>
-                  <h3 className={classes.cardTitle}>{totalRecipients}</h3>
+                  <p className={classes.cardCategory}>Total Users</p>
+                  <h3 className={classes.cardTitle}>
+                    {userInfo.user.totalUsers}
+                  </h3>
                 </CardHeader>
                 <CardFooter stats>
                   <div className={classes.stats}>
@@ -233,4 +229,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Admin;

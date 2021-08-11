@@ -8,26 +8,30 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
-import Divider from "@material-ui/core/Divider";
 import { useStateValue } from "../StateProvider";
+import { Container } from "react-bootstrap";
+import DeleteIcon from "@material-ui/icons/Delete";
+import bankService from "../service/BankService";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
 });
-
+let rows = [];
 const columns = [
-  { id: 1, label: "Date", winWidth: 150 },
-  { id: 2, label: "Description", winWidth: 200 },
-  { id: 3, label: "Amount", winWidth: 150 },
-  { id: 4, label: "Type", winWidth: 150 },
-  { id: 5, label: "Available Balance", winWidth: 150 },
+  { id: 1, label: "First Name", winWidth: 200 },
+  { id: 2, label: "Last Name", winWidth: 200 },
+  { id: 3, label: "Email", winWidth: 200 },
+  { id: 4, label: "Delete", winWidth: 200 },
 ];
 
-const Transactions = () => {
+const UserDetails = (props) => {
   const [{ userInfo }] = useStateValue();
-  const rows = userInfo.user.transactions;
+  rows = props.users;
+  const history = useHistory();
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -41,8 +45,24 @@ const Transactions = () => {
     setPage(0);
   };
 
+  const deleteStyle = { cursor: "pointer", color: "red" };
+  const handleDelete = (userId) => {
+    bankService.deleteUser(userId).then((res) => {
+      if (res.status == 200) {
+        toast.success("User Successfuly deleted", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        history.push("./admin");
+      } else {
+        toast.error("User could not be deleted", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
+    });
+  };
+
   return (
-    <div>
+    <Container>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
@@ -65,12 +85,16 @@ const Transactions = () => {
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
-                <TableRow hover key={row.id}>
-                  <TableCell align="center">{row.date}</TableCell>
-                  <TableCell align="center">{row.description}</TableCell>
-                  <TableCell align="center">{row.amount}</TableCell>
-                  <TableCell align="center">{row.type}</TableCell>
-                  <TableCell align="center">{row.availableBalance}</TableCell>
+                <TableRow hover key={row.userId}>
+                  <TableCell align="center">{row.firstName}</TableCell>
+                  <TableCell align="center">{row.lastName}</TableCell>
+                  <TableCell align="center">{row.email}</TableCell>
+                  <TableCell align="center">
+                    <DeleteIcon
+                      style={deleteStyle}
+                      onClick={() => handleDelete(row.userId)}
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
@@ -85,8 +109,8 @@ const Transactions = () => {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-    </div>
+    </Container>
   );
 };
 
-export default Transactions;
+export default UserDetails;
