@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -37,7 +37,6 @@ const LoginForm = (props) => (
               autoComplete="on"
             />
           </Col>
-          {props.isSubmitting && <LinearProgress />}
         </Row>
         <Row className="mt-4 ">
           <Col className="d-flex justify-content-center p-3">
@@ -51,6 +50,7 @@ const LoginForm = (props) => (
               Submit
             </Button>
           </Col>
+          {props.isSubmitting && <LinearProgress />}
         </Row>
       </Form>
     </fieldset>
@@ -60,6 +60,10 @@ const LoginForm = (props) => (
 const Login = () => {
   const history = useHistory();
   const [{ userInfo }, dispatch] = useStateValue();
+
+  // useEffect(() => {
+  //   localStorage.clear("auth");
+  // }, []);
   return (
     <div>
       <Formik
@@ -74,10 +78,10 @@ const Login = () => {
             .required("Password Required"),
         })}
         onSubmit={(values, actions) => {
-          // localStorage.clear("auth");
           service
             .login(values)
             .then((res) => {
+              localStorage.removeItem("auth");
               if (res.status === 200) {
                 toast.success("Login Successful", {
                   position: toast.POSITION.TOP_CENTER,

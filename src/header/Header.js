@@ -7,11 +7,12 @@ import { Icon } from "semantic-ui-react";
 import { useStateValue } from "../StateProvider";
 import UserMenu from "../menus/UserMenu";
 import AdminMenu from "../menus/AdminMenu";
+
 const Header = () => {
   return (
     <div className="nav-container">
       <Container fluid className="nav-top-fluid">
-        <Container className="nav-top">
+        <Container className="nav-top pt-1 pb-0">
           <Row>
             <Col className="d-none d-md-block">
               <TopNav />
@@ -20,7 +21,7 @@ const Header = () => {
         </Container>
       </Container>
 
-      <Container className="nav-middle">
+      <Container className="nav-middle py-3">
         <Row>
           <Col>
             <Link to="/">
@@ -33,7 +34,7 @@ const Header = () => {
         </Row>
       </Container>
 
-      <Container>
+      <Container className="py-1">
         <Row>
           <Col>
             <NavBottom />
@@ -52,19 +53,15 @@ const TopNav = () => {
 
   return (
     <div>
-      <Nav
-        variant="tabs"
-        defaultActiveKey="advantage"
-        onSelect={handleNavClick}
-      >
+      <Nav variant="tabs" defaultActiveKey="cards" onSelect={handleNavClick}>
         <Nav.Item>
-          <Nav.Link eventKey="advantage">Advantage</Nav.Link>
+          <Nav.Link eventKey="product">Products</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="mobile">Mobile</Nav.Link>
+          <Nav.Link eventKey="price">Prices</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="signin">Sign In</Nav.Link>
+          <Nav.Link eventKey="login">Sign In</Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="register">Register</Nav.Link>
@@ -75,13 +72,13 @@ const TopNav = () => {
 };
 
 const MiddleNav = () => {
-  const [{ userInfo }, dispatch] = useStateValue();
+  const [{ userInfo }] = useStateValue();
 
   return (
     <div>
       {!userInfo && (
         <Nav className="d-flex justify-content-end">
-          <Nav.Item className="me-4">
+          <Nav.Item className="me-3">
             <Nav.Link bsPrefix="middle-navbar" as={Link} to="/login">
               <Icon
                 name="user"
@@ -136,9 +133,7 @@ const NavBottom = () => {
           <Nav.Link className="nav-bottom-links" eventKey="about">
             About
           </Nav.Link>
-          <Nav.Link className="nav-bottom-links" eventKey="package">
-            Package
-          </Nav.Link>
+
           <Nav.Link className="nav-bottom-links" eventKey="location">
             Location
           </Nav.Link>

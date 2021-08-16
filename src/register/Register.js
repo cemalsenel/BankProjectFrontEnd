@@ -82,11 +82,11 @@ const RegistrationForm = (props) => (
             <Row>
               <Col>
                 <label className="p3">
-                  <Field type="checkbox" name="role" value="user" />
+                  <Field type="checkbox" name="role" value="USER" />
                   User
                 </label>
                 <label className="p3 ms-4">
-                  <Field type="checkbox" name="role" value="admin" />
+                  <Field type="checkbox" name="role" value="ADMIN" />
                   Admin
                 </label>
               </Col>
@@ -110,7 +110,6 @@ const RegistrationForm = (props) => (
               label="Confirm Password"
               name="confirmPassword"
             />
-            {props.isSubmitting && <LinearProgress />}
           </Col>
         </Row>
 
@@ -128,6 +127,7 @@ const RegistrationForm = (props) => (
           </Col>
         </Row>
       </Form>
+      {props.isSubmitting && <LinearProgress />}
     </fieldset>
   </Container>
 );
@@ -138,29 +138,34 @@ const Register = () => {
       <Formik
         initialValues={{
           firstName: "",
-          lastname: "",
+          lastName: "",
           dob: "",
           email: "",
           username: "",
-          role: ["user"],
+          role: ["USER"],
           password: "",
           confirmPassword: "",
         }}
         validationSchema={RegisterSchema}
         onSubmit={(values, actions) => {
-          service.register(values).then((res) => {
-            if (res.status === 200) {
-              toast.success("Register Successful", {
+          service
+            .register(values)
+            .then((res) => {
+              if (res.status === 200) {
+                toast.success("Register Successful", {
+                  position: toast.POSITION.TOP_CENTER,
+                });
+                actions.resetForm();
+                actions.setSubmitting(false);
+              }
+            })
+            .catch(() => {
+              toast.error("Register Denied", {
                 position: toast.POSITION.TOP_CENTER,
               });
               actions.resetForm();
-            } else {
-              toast.error(res.data.message, {
-                position: toast.POSITION.TOP_CENTER,
-              });
-            }
-            actions.setSubmitting(false);
-          });
+              actions.setSubmitting(false);
+            });
         }}
         component={RegistrationForm}
       ></Formik>

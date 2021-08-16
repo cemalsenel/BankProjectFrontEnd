@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import React, { useEffect } from "react";
+import React from "react";
 import Header from "./header/Header";
 import Home from "./home/Home";
 import Footer from "./footer/Footer";
@@ -14,6 +14,8 @@ import AddRecipient from "./transfer/AddRecipient";
 import Transfer from "./transfer/Transfer";
 import Admin from "./admin/Admin";
 import UserMgmt from "./admin/UserMgmt";
+import Product from "./product/Product";
+import Price from "./price/Price";
 function App() {
   return (
     <div className="App">
@@ -25,6 +27,12 @@ function App() {
           </Route>
           <Route path="/about">
             <About />
+          </Route>
+          <Route path="/product">
+            <Product />
+          </Route>
+          <Route path="/price">
+            <Price />
           </Route>
           <Route path="/login">
             <Login />

@@ -14,70 +14,78 @@ import Transactions from "../account/Transactions";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core";
 import styles from "../styles/dashboardStyle.js";
-import { Autocomplete } from "@material-ui/lab";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useStyles = makeStyles(styles);
 
 let classes;
 let recipients = "";
 
-const TransferForm = (props) => (
-  <Container className="d-flex justify-content-center">
-    <fieldset>
-      <legend>Transfer</legend>
-      <Form>
-        <Row>
-          <Col
-            xs={12}
-            md={6}
-            className="d-flex justify-content-center text-center p-3"
-          >
-            <Autocomplete
-              className={classes.formControl}
-              name="recipientName"
-              options={recipients}
-              getOptionLabel={(option) => option.name}
-              style={{ width: 200 }}
-              onChange={(e, value) => {
-                props.setFieldValue(
-                  "recipientName",
-                  value !== null ? value.name : ""
-                );
-              }}
-              renderInput={(params) => (
-                <TextField label="Recipient" name="recipientName" {...params} />
-              )}
-            />
-          </Col>
-          <Col xs={12} md={6} className="text-center p-3">
-            <Field
-              className="ms-4"
-              component={FormikTextField}
-              name="amount"
-              type="number"
-              label="amount"
-            />
-          </Col>
-
-          {props.isSubmitting && <LinearProgress />}
-        </Row>
-        <Row className="mt-4 ">
-          <Col className="d-flex justify-content-center p-3">
-            <Button
-              type="submit"
-              onClick={props.submitForm}
-              disabled={props.isSubmitting}
-              variant="contained"
-              color="secondary"
+const TransferForm = (props) => {
+  console.log(props);
+  return (
+    <Container className="d-flex justify-content-center">
+      <fieldset>
+        <legend>Transfer</legend>
+        <Form>
+          <Row>
+            <Col
+              xs={12}
+              md={6}
+              className="d-flex justify-content-center text-center p-3"
             >
-              Submit
-            </Button>
-          </Col>
-        </Row>
-      </Form>
-    </fieldset>
-  </Container>
-);
+              <Autocomplete
+                options={recipients}
+                getOptionLabel={(option) => option.name}
+                className={classes.formControl}
+                name="recipientName"
+                getOptionSelected={(option, value) =>
+                  option.name === value.name
+                }
+                style={{ width: 200 }}
+                onChange={(event, value, clear) => {
+                  props.setFieldValue("recipientName", value?.name || "");
+                }}
+                onOpen={props.setTouched}
+                renderInput={(params) => (
+                  <TextField
+                    label="Recipient"
+                    name="recipientName"
+                    {...params}
+                  />
+                )}
+              />
+            </Col>
+            <Col xs={12} md={6} className="text-center p-3">
+              <Field
+                className="ms-4"
+                component={FormikTextField}
+                name="amount"
+                type="number"
+                label="amount"
+              />
+            </Col>
+
+            {props.isSubmitting && <LinearProgress />}
+          </Row>
+          <Row className="mt-4 ">
+            <Col className="d-flex justify-content-center p-3">
+              <Button
+                type="submit"
+                onClick={props.submitForm}
+                disabled={props.isSubmitting}
+                variant="contained"
+                color="secondary"
+              >
+                Submit
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      </fieldset>
+    </Container>
+  );
+};
 
 const Transfer = () => {
   const history = useHistory();
@@ -112,13 +120,15 @@ const Transfer = () => {
                       type: "UPDATE",
                       item: userInfo,
                     });
-                    actions.resetForm();
+
                     actions.setSubmitting(false);
+                    actions.resetForm();
                   }
                 })
-                .catch(() => {
+                .catch((e) => {
                   actions.setSubmitting(false);
                   actions.resetForm();
+                  console.log(e);
                   toast.error("Transfer Denied", {
                     position: toast.POSITION.TOP_CENTER,
                   });
